@@ -44,8 +44,7 @@ def test_single_qubit_gate_validates_on_each():
     test_qubits = [cirq.NamedQubit(str(i)) for i in range(3)]
 
     _ = g.on_each(*test_qubits)
-    with pytest.raises(ValueError):
-        _ = g.on_each(test_qubits)
+    _ = g.on_each(test_qubits)
 
 
 def test_single_qubit_validates_on():
@@ -139,11 +138,9 @@ def test_on_each():
     assert c.on_each(a, b) == [c(a), c(b)]
     assert c.on_each(b, a) == [c(b), c(a)]
 
-    with pytest.raises(ValueError):
-        c.on_each([])
-
-    with pytest.raises(ValueError):
-        c.on_each([a])
+    assert c.on_each([]) == []
+    assert c.on_each([a]) == [c(a)]
+    assert c.on_each([a, [b, a]]) == [c(a), c(b), c(a)]
 
 
 def test_qasm_output_args_validate():

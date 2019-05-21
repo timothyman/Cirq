@@ -47,7 +47,13 @@ class SingleQubitGate(raw_types.Gate, metaclass=abc.ABCMeta):
         Raises:
             ValueError if targets are not instances of Qid.
         """
-        return [self.on(target) for target in targets]
+        qubits = []
+        for target in targets:
+            if isinstance(target, list):
+                qubits.extend(self.on_each(*target))
+            else:
+                qubits.extend([self.on(target)])
+        return qubits
 
 
 class TwoQubitGate(raw_types.Gate, metaclass=abc.ABCMeta):
