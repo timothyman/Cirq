@@ -50,9 +50,13 @@ class SingleQubitGate(raw_types.Gate, metaclass=abc.ABCMeta):
         qubits = []
         for target in targets:
             if isinstance(target, list):
-                qubits.extend(self.on_each(*target))
+                sub_target = self.on_each(*target)
+                if not qubits:
+                    qubits = sub_target
+                else:
+                    qubits.append(sub_target)
             else:
-                qubits.extend([self.on(target)])
+                qubits.append(self.on(target))
         return qubits
 
 
